@@ -14,4 +14,40 @@ E se volessi un bottone per invertire la “direzione” del carosello?
 ****
 */
 
-console.log('ciao'); 
+//creo l'array
+const carouselData = [
+  {
+    titolo : 'Argentina',
+    descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque exercitationem quaerat odit illo voluptas? Reiciendis aperiam est, quia impedit illum atque reprehenderit obcaecati libero at',
+    image : 'img/argentina.jpg'
+  },
+  {
+    titolo : 'Chile',
+    descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque exercitationem quaerat odit illo voluptas? Reiciendis aperiam est, quia impedit illum atque reprehenderit obcaecati libero at',
+    image : 'img/chile.jpg'
+  },
+  {
+    titolo : 'Colombia',
+    descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque exercitationem quaerat odit illo voluptas? Reiciendis aperiam est, quia impedit illum atque reprehenderit obcaecati libero at',
+    image : 'img/colombia.jpg'
+  },
+  {
+    titolo : 'Peru',
+    descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque exercitationem quaerat odit illo voluptas? Reiciendis aperiam est, quia impedit illum atque reprehenderit obcaecati libero at',
+    image : 'img/peru.jpg'
+  },
+  {
+    titolo : 'Sweden',
+    descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque exercitationem quaerat odit illo voluptas? Reiciendis aperiam est, quia impedit illum atque reprehenderit obcaecati libero at',
+    image : 'img/sweden.jpg'
+  }
+];
+
+
+//ciclo forEach di lettura
+carouselData.forEach((element) => {
+  console.log(`${element.titolo} e ${element.descrizione} e ${element.image}`);
+});
+
+const container = document.querySelector('.container');
+
