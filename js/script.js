@@ -19,68 +19,163 @@ const carouselData = [
   {
     titolo : 'Argentina',
     descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque exercitatione',
-    image : 'argentina.jpg'
+    image :'https://static1.evcdn.net/images/reduction/1583177_w-1920_h-1080_q-70_m-crop.jpg'
   },
   {
     titolo : 'Chile',
     descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque',
-    image : 'chile.jpg'
+    image : 'https://img.itinari.com/pages/images/original/0d3ed180-d22d-48e8-84df-19c4d888b41f-62-crop.jpg?ch=DPR&dpr=2.625&w=1600&s=7ebd4b5a9e045f41b4e0c7c75d298d6c'
   },
   {
     titolo : 'Colombia',
     descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    image : 'colombia.jpg'
+    image : 'https://cdn.sanity.io/images/24oxpx4s/prod/ed09eff0362396772ad50ec3bfb728d332eb1c30-3200x2125.jpg?w=1600&h=1063&fit=crop'
   },
   {
     titolo : 'Peru',
     descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque exercitationem quaerat',
-    image : 'peru.jpg'
+    image : 'https://static1.evcdn.net/images/reduction/1513757_w-1920_h-1080_q-70_m-crop.jpg'
   },
   {
     titolo : 'Sweden',
     descrizione : 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    image : 'sweden.jpg'
+    image : 'http://www.viaggiareonline.it/wp-content/uploads/2014/11/sweden_148857365.jpg'
+
   }
 ];
 
-const firstContainer = document.querySelector('.first-container');
+const slider = document.querySelector('.slider-container');
+const thumbs = document.querySelector('.thumbs-container');
+const generalContainer = document.querySelector('.container');
 
-//ciclo forEach di lettura
-//console.log(`${element.titolo} e ${element.descrizione} e ${element.image}`);
+const buttonNext = document.querySelector('.next');
+buttonNext.isNext = true;
+const buttonPrev = document.querySelector('.prev');
+buttonPrev.isNext = false;
 
-carouselData.forEach((element) => {
-  const country = element.titolo;
-  const text = element.descrizione;
-  const photo = element.image;
-  const container = `
-  <div class="container">
-  
-  <div class="slider">
-      <img class="" src="img/${photo}" alt="Foto1">
-      <div class="text">
-        <h2 class="title">${country}</h2>
-        <p class="description">${text}</p>
+buttonNext.addEventListener('click', nextPrev);
+buttonPrev.addEventListener('click', nextPrev);
+
+let counterImages = 0;
+//const counterThumb = 0;
+
+let isMouseOver = false;
+generalContainer.addEventListener('mouseenter', () => {
+  isMouseOver = true;
+})
+generalContainer.addEventListener('mouseleave', () => {
+  isMouseOver = false;
+})
+
+let isNextDirection = true;
+generalContainer.addEventListener('dblclick', () => {
+  //toggle, deve diventare il contrario di se stessa
+  isNextDirection = !isNextDirection;
+})
+
+document.addEventListener('keypress', (event) => {
+  if (event.code === 'Space'){
+    isMouseOver = !isMouseOver;
+  }
+})
+
+
+init ();
+
+function init (){
+
+  slider.innerHTML ='';
+  thumbs.innerHTML ='';
+
+  carouselData.forEach((element, index) => {
+    slider.innerHTML += getTemplateSl(element);
+    thumbs.innerHTML += getTemplateThumbs(element, index)
+  })
+
+  activatePic();
+  //activateThumb()
+}
+
+function nextPrev() {
+  //console.log(this.isNext);
+  //disattivare le img a indice counterimage
+  deActivatePic()
+  //incrementare o decrementare il counter
+  if (this.isNext){
+    counterImages++;
+    if (counterImages === carouselData.length) counterImages = 0;
+    //attivare le img a indice counter
+  } else {
+    counterImages--;
+    if (counterImages === -1) counterImages = carouselData.length -1;
+  }
+  //attivare le img a indice counter
+  activatePic();
+}
+
+function autoslider(isNext) {
+  if (isNext){
+    counterImages++;
+    if (counterImages === carouselData.length) counterImages = 0;
+  } else {
+    counterImages--;
+    if (counterImages === -1) counterImages = carouselData.length -1;
+  }
+}
+
+function activatePic() {
+  document.getElementsByClassName('current-image')[counterImages].classList.add('active');
+  document.getElementsByClassName('current-thumb')[counterImages].classList.add('active')
+}
+function deActivatePic() {
+  document.getElementsByClassName('current-image')[counterImages].classList.remove('active');
+  document.getElementsByClassName('current-thumb')[counterImages].classList.remove('active')
+}
+/*
+function activateThumb() {
+  document.getElementsByClassName('current-thumb')[counterThumb].classList.add('active')
+}*/
+
+function getTemplateSl (element) {
+    const country = element.titolo;
+    const text = element.descrizione;
+    const photo = element.image;
+
+    return `
+    
+      <div class="current-image">
+        <img class="hide" src="${photo}" alt="${country}">
+        <div class="text">
+          <h2 class="title hide">${country}</h2>
+          <p class="description hide">${text}</p>
+        </div>
       </div>
+    
+    `
+}
+
+function getTemplateThumbs (element, index) {
+  const country = element.titolo;
+  const photo = element.image;
+  return `
+  <div class="current-thumb d-flex" onclick="chooseThumb(${index})">
+    <img class="" src="${photo}" alt="${country}">
   </div>
+  `
+}
 
-  <div class="h-carousel d-flex">
-      <img class="" src="img/${photo}" alt="Foto1">
-      <img class="" src="img/${photo}" alt="Foto2">
-      <img class="" src="img/${photo}" alt="Foto3">
-      <img class="" src="img/${photo}" alt="Foto4">
-      <img class="" src="img/${photo}" alt="Foto5">
-  
-      <div class="btn left">&larr;</div>
-      <div class="btn right">&rarr;</div>
-  </div>
-  
-  </div>`
-  
-  
-  firstContainer.innerHTML = container;
-});
+function chooseThumb (index){
+  //console.log(index);
+  deActivatePic();
+  counterImages = index;
+  activatePic();
+}
 
+setInterval(() => {
 
-
-//container.innerHTML = carouselData;
-//console.log(carouselData);
+  if (!isMouseOver) {
+    deActivatePic();
+    autoslider (isNextDirection);
+    activatePic();
+  } 
+}, 2500);
